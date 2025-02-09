@@ -31,7 +31,17 @@ class CollusionLearner():
         opp_action_hist = self.opp_action_hist
         NUM_ACTIONS = self.num_actions
         # TODO: Fill out your state representation
-        raise NotImplementedError
+        # No state-space discretization is needed since it's already being discretized
+
+        if not my_action_hist or not opp_action_hist:
+            return 0
+        
+        my_last_action = my_action_hist[-1]
+        opp_last_action = opp_action_hist[-1]
+
+        # Put each discrete action from myself and opponent into its own state-space
+        return my_last_action + self.num_actions * opp_last_action
+        # raise NotImplementedError
         
     def check_if_converged(self, old_optimal_actions, step):
         """Checks if Q matrices have converged, i.e., if optimal actions do not change for 100000 steps"""
@@ -107,7 +117,7 @@ if __name__ == "__main__":
     NUM_POSSIBLE_ACTIONS = 15
     
     # TODO: FILL OUT WITH NUMBER OF STATES IN YOUR STATE REPRESENTATION 
-    NUM_POSSIBLE_STATES = ???
+    NUM_POSSIBLE_STATES = NUM_POSSIBLE_ACTIONS * NUM_POSSIBLE_ACTIONS
     ####################################################################
 
     # START SIMULATING THE GAME
