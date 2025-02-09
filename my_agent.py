@@ -19,14 +19,30 @@ class MyChickenAgent(QLearning):
         my_util_hist = self.get_util_history()
         
         # TODO: Fill out this function
-        raise NotImplementedError
+        if not my_action_hist or not opp_action_hist:
+            return 0
+        my_last_action = my_action_hist[-1]
+        opp_last_action = opp_action_hist[-1]
+
+        # Let continue = 0; swerve = 1
+        if my_last_action == 0 and opp_last_action == 0:    # Both continue
+            return 0    # return state_0
+        elif my_last_action == 0 and opp_last_action == 1:  # I continue, opp swerve
+            return 1    # return state_1
+        elif my_last_action == 1 and opp_last_action == 0:  # I swerve, opp continue
+            return 2
+        elif my_last_action == 1 and opp_last_action == 1:
+            return 3
+        else:
+            return 0
+        # raise NotImplementedError
 
 
 if __name__ == "__main__":
     NUM_TRAINING_ITERATIONS = 20000
     NUM_ITERATIONS_PER_PRINT = 1000
     # this agent only uses ??? states
-    NUM_POSSIBLE_STATES = ???  # TODO: UPDATE THE NUMBER OF POSSIBLE STATES
+    NUM_POSSIBLE_STATES = 4  # TODO: UPDATE THE NUMBER OF POSSIBLE STATES
     # chicken has 2 possible actions (CONTINUE and SWERVE).
     NUM_POSSIBLE_ACTIONS = 2
 
@@ -37,7 +53,7 @@ if __name__ == "__main__":
     EXPLORATION_RATE = 0.05
     
     # TODO: Please fill out each of these parameters: 
-    name = ??? # Give your agent a name 
+    name = "max" # Give your agent a name 
     train = True # Set this to false if you want your agent to be purely exploiting and not exploring after training 
     save_q_table = "q-table.npy" # Set to None to not save the q-table, otherwise save it under the file path that you give it E.g. "qtable.npy" 
                         # If the file already exists then it will initialize the q-table using the saved npy file. 
