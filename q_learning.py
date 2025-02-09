@@ -45,7 +45,20 @@ class QLearning(ChickenAgent):
         # Otherwise
         #    - Always choose the best action because you are no longer training
         # Hint: np.argmax and self.training_policy.get_move() may be useful!
-        raise NotImplementedError
+        # raise NotImplementedError
+        if self.training_mode:
+            epsilon_greedy = self.exploration_rate
+            random_number = random.random()
+            if random_number < epsilon_greedy:
+                # Explore strategy
+                next_action = self.training_policy.get_move(s_prime)
+            else:
+                next_action = np.argmax(self.q[s_prime])
+        else:
+            next_action = np.argmax(self.q[s_prime])
+
+        return next_action
+
 
     def get_action(self):
         return self.a
@@ -62,7 +75,7 @@ class QLearning(ChickenAgent):
         # TODO: fill in the Q-learning update algorithm, updating self.Q
         # Q(s, a) = Q(s, a) + α[r + γ max_{a'} Q(s', a') − Q(s, a)]
         # Hint: np.max and self.s_prime may be useful!
-        raise NotImplementedError
+        # raise NotImplementedError
         if self.save_path:
             with open(self.save_path, 'wb') as saved_q_table:
                 np.save(saved_q_table, self.q)
