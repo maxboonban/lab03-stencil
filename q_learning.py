@@ -59,8 +59,7 @@ class QLearning(ChickenAgent):
         else:
             next_action = np.argmax(self.q[s_prime])
             self.a = next_action
-
-
+        return next_action
 
     def get_action(self):
         return self.a
@@ -83,7 +82,7 @@ class QLearning(ChickenAgent):
         if self.s_prime != None:
             max_q = np.max(self.q[self.s_prime])
 
-            self.q[self.s, self.a] += self.learning_rate * (reward * self.discount_factor * max_q - self.q[self.s, self.a])
+            self.q[self.s, self.a] += self.learning_rate * (reward + self.discount_factor * max_q - self.q[self.s, self.a])
 
         if self.save_path:
             with open(self.save_path, 'wb') as saved_q_table:
