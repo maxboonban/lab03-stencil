@@ -52,12 +52,14 @@ class QLearning(ChickenAgent):
             if random_number < epsilon_greedy:
                 # Explore strategy
                 next_action = self.training_policy.get_move(s_prime)
+                self.a = next_action
             else:
                 next_action = np.argmax(self.q[s_prime])
+                self.a = next_action
         else:
             next_action = np.argmax(self.q[s_prime])
+            self.a = next_action
 
-        return next_action
 
 
     def get_action(self):
@@ -76,6 +78,13 @@ class QLearning(ChickenAgent):
         # Q(s, a) = Q(s, a) + α[r + γ max_{a'} Q(s', a') − Q(s, a)]
         # Hint: np.max and self.s_prime may be useful!
         # raise NotImplementedError
+        
+        # Only update after initial state (s is non-terminal)
+        if self.s_prime != None:
+            max_q = np.max(self.q[self.s_prime])
+
+            self.q[self.s, self.a] += self.learning_rate * (reward * self.discount_factor * max_q - self.q[self.s, self.a])
+
         if self.save_path:
             with open(self.save_path, 'wb') as saved_q_table:
                 np.save(saved_q_table, self.q)
